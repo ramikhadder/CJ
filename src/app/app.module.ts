@@ -6,7 +6,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatAutocompleteModule,
   MatButtonModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatIconModule, MatInputModule, MatMenuModule,
-  MatSelectModule
+  MatSelectModule, MatSnackBarModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AppService} from './app.service';
@@ -34,6 +34,7 @@ import {AppAuthGuard} from './app.auth.guard';
     MatSelectModule,
     MatMenuModule,
     MatAutocompleteModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
     Routing
   ],

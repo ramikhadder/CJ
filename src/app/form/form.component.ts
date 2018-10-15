@@ -6,6 +6,7 @@ import * as genres from './genres.json';
 import * as instruments from './instruments.json';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-form',
@@ -15,7 +16,8 @@ import {map, startWith} from 'rxjs/operators';
 export class FormComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
-              private appService: AppService) {
+              private appService: AppService,
+              private snackBar: MatSnackBar) {
   }
 
   public data;
@@ -102,6 +104,7 @@ export class FormComponent implements OnInit {
           this.form.value[checkbox.id].push(key);
         }
       }
+      checkbox.checked = {};
     }
 
     this.form.value.other = this.otherTags;
@@ -112,11 +115,17 @@ export class FormComponent implements OnInit {
     this.form.value.instruments = instrumentTags;
 
     this.appService.submitForm(this.form.value, this.data.songs[this.songCount].id).subscribe(() => {
+      this.snackBar.open('Submission received!', 'Close', {
+        duration: 2000
+      });
       this.form.reset();
       formDirective.resetForm();
       this.otherTags = [];
       this.instrumentTags = [];
       this.songCount++;
+      if (this.songCount < this.data.songs.length) {
+        window.open(this.data.songs[this.songCount].url, '_blank');
+      }
     });
   }
 
