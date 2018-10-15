@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AppService} from '../app.service';
 import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
 import * as genres from './genres.json';
+import * as otherGenres from './otherGenres.json';
 import * as instruments from './instruments.json';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
@@ -27,8 +28,11 @@ export class FormComponent implements OnInit {
 
   myControl = new FormControl();
   filteredOptions: Observable<any[]>;
+  genreControl = new FormControl();
+  filteredGenreOptions: Observable<any[]>;
 
   genres: any;
+  otherGenres: any;
   instruments: any;
   instrumentTags = [];
   otherTags = [];
@@ -67,10 +71,16 @@ export class FormComponent implements OnInit {
   ngOnInit() {
     this.genres = (<any>genres).default;
     this.instruments = (<any>instruments).default;
+    this.otherGenres = (<any>otherGenres).default;
     this.filteredOptions = this.myControl.valueChanges
       .pipe(
         startWith(''),
         map(value => this._filter(value))
+      );
+    this.filteredGenreOptions = this.genreControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._genreFilter(value))
       );
     this.data = JSON.parse(sessionStorage.getItem('user'));
     console.log(this.data);
@@ -78,6 +88,7 @@ export class FormComponent implements OnInit {
     this.form = this.fb.group({
       genre: ['', Validators.required],
       subgenre: ['', Validators.required],
+      othergenre: ['', Validators.required],
       'city-country': ['', Validators.required],
       relatedartists: ['', Validators.required],
       activities: ['', Validators.required],
@@ -153,6 +164,12 @@ export class FormComponent implements OnInit {
     this.instrumentTags.splice(index, 1);
   }
 
+  addOtherGenre(genre) {
+    this.form.patchValue({
+      othergenre: genre
+    });
+  }
+
   private _filter(value: string): any[] {
     if (value == null) {
       return;
@@ -168,6 +185,12 @@ export class FormComponent implements OnInit {
         return 0;
       }
     });
+  }
+
+  private _genreFilter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.otherGenres.filter(option => option.toLowerCase().includes(filterValue));
   }
 
 }

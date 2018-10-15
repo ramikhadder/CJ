@@ -53,6 +53,10 @@ router.post('/jwt', function(req, res, next) {
           end++;
           continue;
         }
+        if (song.duration / 60000 > 20) {
+          end++;
+          continue;
+        }
         songs.push({id: key, url: song.permalink_url });
       }
       data.songs = songs;
