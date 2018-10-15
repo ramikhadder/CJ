@@ -29,8 +29,8 @@ router.post('/submit/:id/:songId', function(req, res, next) {
     first_name: firstName,
     last_name: lastName
   };
-  firebase.database().ref('/submissions/' + req.params.id + '/first_name').set(firstName);
-  firebase.database().ref('/submissions/' + req.params.id + '/last_name').set(lastName);
+  // firebase.database().ref('/submissions/' + req.params.id + '/first_name').set(firstName);
+  // firebase.database().ref('/submissions/' + req.params.id + '/last_name').set(lastName);
   firebase.database().ref('/submissions/' + req.params.id + '/' + req.params.songId).set(req.body);
   res.json(200);
 });
