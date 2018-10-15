@@ -1,0 +1,110 @@
+<div class="wrapper">
+  <mat-card>
+
+    <div class="form-message">
+      <span *ngIf="songCount < data.songs.length">Please listen to the song <a [href]="data.songs[songCount].url"
+                                                                               target="_blank">here</a> to answer the questions below.</span>
+      <span *ngIf="songCount >= data.songs.length">Thank you for answering our questions!</span>
+    </div>
+
+    <form [formGroup]="form" #formDirective="ngForm" (submit)="submitForm(formDirective)" *ngIf="songCount < data.songs.length">
+      <div *ngFor="let checkbox of checkboxes">
+        <span><strong>{{checkbox.label}}</strong></span>
+        <div class="checkboxes">
+          <mat-checkbox *ngFor="let word of checkbox.bank" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="checkbox.checked[word]">{{word}}
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>What genre would you say this song belongs to?</mat-label>
+        <mat-select placeholder="Select genre" formControlName="genre">
+          <mat-option *ngFor="let genre of genres" [value]="genre.genre" (click)="subgenres = genre.subgenres">
+            {{genre.genre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="subgenres != null" appearance="outline">
+        <mat-label>What sub-genre would you say this song belongs to?</mat-label>
+        <mat-select placeholder="Select sub-genre" formControlName="subgenre">
+          <mat-option *ngFor="let subgenre of subgenres" [value]="subgenre">{{subgenre}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>What instruments do you hear in the song?</mat-label>
+        <mat-chip-list #tagList>
+          <mat-chip *ngFor="let tag of instrumentTags; let i = index" (removed)="removeInstrumentTag(tag, i)"
+                    color="primary"
+                    selected>
+            {{tag.name}}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+          <input #instrumentInput placeholder="Select instrument"
+                 matInput
+                 [formControl]="myControl"
+                 [matAutocomplete]="auto"
+                 [matChipInputFor]="tagList"
+                 [matChipInputAddOnBlur]="false" required>
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let instrument of filteredOptions | async; let i = index"
+                      (click)="addInstrumentTag(instrument, i); instrumentInput.value = ''"
+                      [value]="instrument.name"
+                      [title]="instrument.description ? instrument.description : ''">
+            {{instrument.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Does this song make you think of a certain city or country?</mat-label>
+        <input matInput placeholder="Type here.." formControlName="city-country">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Does this song remind you of any other artists/groups?</mat-label>
+        <textarea matInput placeholder="Type here.." formControlName="relatedartists"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>What do you feel like doing during/after listening to this song?</mat-label>
+        <textarea matInput placeholder="Type here.." formControlName="activities"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Would you go to a concert for this artist? (Why/why not?)</mat-label>
+        <textarea matInput placeholder="Type here.." formControlName="concert"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Would you listen to this song again? (Why/why not?)</mat-label>
+        <textarea matInput placeholder="Type here.." formControlName="repeatplay"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>List any words you would use to describe this song</mat-label>
+        <mat-chip-list #tagList2>
+          <mat-chip *ngFor="let tag of otherTags; let i = index" (removed)="removeTag(i)"
+                    color="primary"
+                    selected>
+            {{tag}}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+          <input #tagsInput placeholder="Press Enter or Space to add a tag"
+                 matInput
+                 [matChipInputFor]="tagList2"
+                 [matChipInputAddOnBlur]="true"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 (matChipInputTokenEnd)="addTag($event); tagsInput.value = ''"required>
+        </mat-chip-list>
+      </mat-form-field>
+
+      <div class="button-wrapper">
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+      </div>
+    </form>
+  </mat-card>
+</div>

@@ -1,0 +1,32 @@
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  padding: 2rem 16rem;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form-message {
+  margin-bottom: 1rem;
+}
+
+.checkboxes {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 1rem;
+}
+
+.mat-chip {
+  background: #3e51b5!important;
+  color: white!important;
+
+  .mat-icon {
+    color: white!important;;
+  }
+}
